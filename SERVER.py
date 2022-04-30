@@ -2,7 +2,8 @@ import socket
 import threading
 
 HOST = "127.0.0.1" 
-PORT = 8005 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+PORT = 8005 
+server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((HOST,PORT))
 server.listen()
 print("Server is listening...")
@@ -13,7 +14,7 @@ nicknames = []
 def broadcast (message):
     for client in clients:
         client.send(message)
- handle (client):
+def  handle (client):
 
     while True:
         try:
@@ -38,21 +39,14 @@ def receive ():
         nicknames.append(nickname)
         clients.append(client)
         print(f"[NICKNAME] client: {nickname}")
-        broadcast(f"{nickname} join to chat!".encode("ascii")) # prikaže se drugima
+        broadcast(f"{nickname} join to chat!".encode("ascii"))
         
-        # client.send....server nas obavještava da se klijent pridružio chatu
         client.send(b"Connection to the server!\n")
         client.send("If you want to exit a chat type EXIT".encode("ascii"))
       
-        # odnosi se na svakog klijenta posebno, jer svaki klijent može nešto poslati, zato se piše jedan
-        #iako je omogućeno sudjelovanje više korsnika radi se struktura za jednog jer svi klijenti kad se
-        #priključe ulaze u While loop i po istoj shemi rade
-        # stavljanjem thread(niti) upravo omogućavamo korisniku handle, tj da unese poruku 
-        #koristeći niti ubrzavamo proces slanja i primanja između korisnika
-        thread = threading.Thread(target=handle,args=(client,))
-        # ne treba join()
-        thread.start()
        
-#zašto pozivamo samo receive
-#ostalo je sadržano tu
+        thread = threading.Thread(target=handle,args=(client,))
+        
+        thread.start()
+
 receive()
