@@ -39,8 +39,7 @@ def write():
          break
       client.send(bytes(message,"utf-8"))
       
-# thread -> isti razlog kao i kod servera 
-# ne treba join je ne upravljamo mi direktno, nego puštamo slučaju
+
 thread = threading.Thread(target=receive)
 thread.start()
 thread = threading.Thread(target=write)
